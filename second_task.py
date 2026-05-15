@@ -1,9 +1,13 @@
-
-class IceCreamStand():
-    def __init__(self, iceFlavors, restaurantLocation, timeWorking):
-        self.iceFlavors = ["Banana","Cherry", "Mango", "Strawberry", "Biscuit Tortoni", "Caramel", "Chocolate", "Pistachio", "Vanilla"]
+from task_one import Restaurant
+class IceCreamStand(Restaurant):
+    def __init__(self,restaurantName,  restaurantType, iceFlavors, restaurantLocation, timeWorking):
+        super().__init__(restaurantName, restaurantType)
+        self.iceFlavors = iceFlavors        
         self.restaurantLocation = restaurantLocation
         self.timeWorking = timeWorking
+
+    # def print_flavors(self):
+    #     print(self.iceFlavors)
 
     def add_flavor(self):
         newFlavor = input("If you have ideas for new flavors, please let us know:  ")
@@ -38,6 +42,9 @@ class IceCreamStand():
 
     def ice_gelato(self):
         print("gelato")
+
+
+newRes = IceCreamStand()
 
 
 
