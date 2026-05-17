@@ -8,7 +8,7 @@ class iceCreamStandInterface:
     def __init__(self, shopName):
         self.myFrame = Tk()
         self.myFrame.title("Ice cream shop")
-        self.myFrame.geometry("600x500")
+        self.myFrame.geometry("500x250")
         self.shopName = shopName
         # self.myFrame.columnconfigure(0, weight=1)
         # self.myFrame.columnconfigure(1, weight=2)
@@ -18,9 +18,9 @@ class iceCreamStandInterface:
         self.addFlavorEntry = Entry(self.myFrame)
         self.deleteFlavorLabel = Label(self.myFrame)
         self.deleteFlavorEntry  = Entry(self.myFrame)
+        self.btnAddFlavor = Button(self.myFrame)
         #this list is just an example, later I'll remove it and every instance will have its owen list of flavors
         self.flavors = ["Banana","Cherry", "Mango", "Strawberry", "Biscuit Tortoni", "Caramel", "Chocolate", "Pistachio", "Vanilla"]
-
 
         self.title = Label(self.myFrame, text=self.shopName , font="Calibri 20 bold")
         self.title.grid(row=0, column=1, columnspan=2,sticky="we", padx=5)
@@ -28,14 +28,10 @@ class iceCreamStandInterface:
         self.listFlavors = Label(self.myFrame, text="List flavors: ", font="Calibri 12 bold")
         self.listFlavors.grid(row=1, column=0, pady=10, padx=5, sticky="w")
         
-
         self.flavorOptions = ttk.Combobox(self.myFrame, values = self.flavors)
         # newIceCreamShop.print_flavors()
         self.flavorOptions.grid( row=1 , column=1, sticky="ew", padx=10, pady=10)
         self.flavorOptions.current(0)
-
-
-
 
         self.welcomeMessage = Label(self.myFrame, text="Add/Delete flavor: ", font="Calibri 12 bold")
         self.welcomeMessage.grid(row=2, column=0, pady=10, padx=5)
@@ -46,79 +42,55 @@ class iceCreamStandInterface:
         self.operationDeleteFlavor = Radiobutton(self.myFrame, text="Delete flavor", variable= self.operation, value="delete", command=self.defined_operation)
         self.operationDeleteFlavor.grid(row=4, column=0, sticky="w", pady=5, padx=5)
         
-
-
-
     def defined_operation(self):
         operationChoice = self.operation.get() 
          
         if operationChoice == "add":
             self.show_add_flavor_elements()
         else:
-            self.show_delete_flavor_elements()
+            self.delete_flavor()
 
     def destroy_all_elements(self):
         self.addFlavorLabel.destroy()
         self.addFlavorEntry.destroy()
-        self.deleteFlavorLabel.destroy()
-        self.deleteFlavorEntry.destroy()
+        self.btnAddFlavor.destroy()
         
-
-
-
     def show_add_flavor_elements(self):
         self.destroy_all_elements()
+        self.myFrame.geometry("500x350")
         self.addFlavorLabel = Label(self.myFrame, text="Add flavor",font="Calibri 14 bold" )
         self.addFlavorLabel.grid(row=5, column=0, padx=5, pady=10, sticky="w")
         self.addFlavorEntry = Entry(self.myFrame, width=40, font=("Calibri", 12))
-        self.addFlavorEntry.grid(row=5, column=1, padx=5, pady=10, ipadx=5, sticky="w")
+        self.addFlavorEntry.grid(row=5, column=1, padx=5, pady=10, sticky="w")
+        self.btnAddFlavor = Button(self.myFrame, text="Add flavor", bg="#009900", fg="white", font="Calibri 10 bold", command= self.add_flavor)
+        self.btnAddFlavor.grid(row=6, column=0,  padx=(10, 20), pady=30, sticky="e", ipadx=5, ipady=5)
 
+    def add_flavor(self):
+        self.addedFlavor = self.addFlavorEntry.get()
+        if self.addedFlavor == "":
+            messagebox.showwarning("Empty feild", "Please enter a valid value")
+        else:
+            if self.addedFlavor.strip().capitalize() in self.flavors:
+                messagebox.showwarning("flavor already exists", "The flavor you're trying to add is already disponible in our restaurant please choose another")
+            else:
+                self.flavors.append(self.addedFlavor)
+                messagebox.showinfo("Flavor added", f"The {self.addedFlavor} flavor was added")
+                print(self.flavors)
+                self.myFrame.destroy()
 
-    def show_delete_flavor_elements(self):
+    def delete_flavor(self):
         self.destroy_all_elements()
+        self.myFrame.geometry("500x250")
         self.flavorDeleted =  self.flavorOptions.get()
         clickedBtn = messagebox.askyesno("Delete ", f"Are you sure that you want to delete {self.flavorDeleted} flavor")
         if clickedBtn:
             self.flavors.remove(self.flavorDeleted)
+            print(self.flavors)
             messagebox.showinfo("Flavor deleted", f"The {self.flavorDeleted} flavor was deleted")
-            self.myFrame.quit()
+            self.myFrame.destroy()
+        else:
+            self.myFrame.destroy()
 
-
-
-
-
-        # self.deleteFlavorLabel = Label(self.myFrame, text="Delete flavor",font="Calibri 14 bold" )
-        # self.deleteFlavorLabel.grid(row=5, column=0, sticky="w")
-        # self.deleteFlavorEntry = Entry(self.myFrame, width=40,font=("Calibri", 12))
-        # self.deleteFlavorEntry.grid(row=5, column=1, pady=20, ipady=5, ipadx=5)
-
-
-
-
-
-
-
-
-
-        
-       
-
-        # btnAddFlavor = Button(self.myFrame, text="Add flavor", bg="#009900", fg="white", font="Calibri 10 bold")
-        # btnAddFlavor.grid(row=4, column=0,  padx=(10, 20), pady=30, sticky="e", ipadx=5, ipady=5)
-
-        # btnDeleteFlavor = Button(self.myFrame, text="Delete flavor", bg="#F83131", fg="white", font="Calibri 10 bold")
-        # btnDeleteFlavor.grid(row=4, column=1, padx=(20,10), pady=30, sticky="w", ipadx=5, ipady=5)
-
-
-
-
-
-shopApp = iceCreamStandInterface("Hello there")
-
-
-# shopApp.defined_operation()
-
-
-
+shopApp = iceCreamStandInterface("First restaurant")
 
 shopApp.myFrame.mainloop()
