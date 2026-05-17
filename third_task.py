@@ -5,7 +5,7 @@ from tkinter import messagebox
 
 class iceCreamStandInterface:
    
-    def __init__(self, shopName):
+    def __init__(self, shopName, flavors=["Banana","Cherry", "Mango", "Strawberry"]):
         self.myFrame = Tk()
         self.myFrame.title("Ice cream shop")
         self.myFrame.geometry("500x250")
@@ -20,7 +20,8 @@ class iceCreamStandInterface:
         self.deleteFlavorEntry  = Entry(self.myFrame)
         self.btnAddFlavor = Button(self.myFrame)
         #this list is just an example, later I'll remove it and every instance will have its owen list of flavors
-        self.flavors = ["Banana","Cherry", "Mango", "Strawberry", "Biscuit Tortoni", "Caramel", "Chocolate", "Pistachio", "Vanilla"]
+        # self.flavors = ["Banana","Cherry", "Mango", "Strawberry", "Biscuit Tortoni", "Caramel", "Chocolate", "Pistachio", "Vanilla"]
+        self.flavors = flavors
 
         self.title = Label(self.myFrame, text=self.shopName , font="Calibri 20 bold")
         self.title.grid(row=0, column=1, columnspan=2,sticky="we", padx=5)
@@ -91,6 +92,8 @@ class iceCreamStandInterface:
         else:
             self.myFrame.destroy()
 
-shopApp = iceCreamStandInterface("First restaurant")
+shopApp = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Mango", "Strawberry"])
+shop2 = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Strawberry"])
 
-shopApp.myFrame.mainloop()
+
+shop2.myFrame.mainloop()
