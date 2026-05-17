@@ -5,7 +5,7 @@ from tkinter import messagebox
 
 class iceCreamStandInterface:
    
-    def __init__(self, shopName, flavors=["Banana","Cherry", "Mango", "Strawberry"]):
+    def __init__(self, shopName, flavors):
         self.myFrame = Tk()
         self.myFrame.title("Ice cream shop")
         self.myFrame.geometry("500x250")
@@ -21,7 +21,7 @@ class iceCreamStandInterface:
         self.btnAddFlavor = Button(self.myFrame)
         #this list is just an example, later I'll remove it and every instance will have its owen list of flavors
         # self.flavors = ["Banana","Cherry", "Mango", "Strawberry", "Biscuit Tortoni", "Caramel", "Chocolate", "Pistachio", "Vanilla"]
-        self.flavors = flavors
+        self.flavors = list(flavors)
 
         self.title = Label(self.myFrame, text=self.shopName , font="Calibri 20 bold")
         self.title.grid(row=0, column=1, columnspan=2,sticky="we", padx=5)
@@ -30,7 +30,6 @@ class iceCreamStandInterface:
         self.listFlavors.grid(row=1, column=0, pady=10, padx=5, sticky="w")
         
         self.flavorOptions = ttk.Combobox(self.myFrame, values = self.flavors)
-        # newIceCreamShop.print_flavors()
         self.flavorOptions.grid( row=1 , column=1, sticky="ew", padx=10, pady=10)
         self.flavorOptions.current(0)
 
@@ -55,8 +54,17 @@ class iceCreamStandInterface:
         self.addFlavorLabel.destroy()
         self.addFlavorEntry.destroy()
         self.btnAddFlavor.destroy()
-        
+
+    def update_combobox(self):
+
+        self.flavorOptions['values'] = self.flavors
+        if self.flavors:
+            self.flavorOptions.current(0)
+        else:
+            self.flavorOptions.set('')
+
     def show_add_flavor_elements(self):
+        print(self.flavors)
         self.destroy_all_elements()
         self.myFrame.geometry("500x350")
         self.addFlavorLabel = Label(self.myFrame, text="Add flavor",font="Calibri 14 bold" )
@@ -67,33 +75,37 @@ class iceCreamStandInterface:
         self.btnAddFlavor.grid(row=6, column=0,  padx=(10, 20), pady=30, sticky="e", ipadx=5, ipady=5)
 
     def add_flavor(self):
+        print(self.flavors)
         self.addedFlavor = self.addFlavorEntry.get()
-        if self.addedFlavor == "":
+        if self.addedFlavor == "" :
             messagebox.showwarning("Empty feild", "Please enter a valid value")
         else:
-            if self.addedFlavor.strip().capitalize() in self.flavors:
+            if self.addedFlavor.strip().capitalize() in [flavor.capitalize() for flavor in self.flavors] :
                 messagebox.showwarning("flavor already exists", "The flavor you're trying to add is already disponible in our restaurant please choose another")
             else:
-                self.flavors.append(self.addedFlavor)
+                self.flavors.append(self.addedFlavor.capitalize())
                 messagebox.showinfo("Flavor added", f"The {self.addedFlavor} flavor was added")
-                print(self.flavors)
-                self.myFrame.destroy()
+                self.update_combobox()
+                self.addFlavorEntry.delete(0, END)
+                # self.myFrame.destroy()
+        
 
     def delete_flavor(self):
+        print(self.flavors)
         self.destroy_all_elements()
         self.myFrame.geometry("500x250")
         self.flavorDeleted =  self.flavorOptions.get()
         clickedBtn = messagebox.askyesno("Delete ", f"Are you sure that you want to delete {self.flavorDeleted} flavor")
         if clickedBtn:
             self.flavors.remove(self.flavorDeleted)
-            print(self.flavors)
             messagebox.showinfo("Flavor deleted", f"The {self.flavorDeleted} flavor was deleted")
-            self.myFrame.destroy()
+            self.update_combobox()
+            # self.myFrame.destroy()
         else:
             self.myFrame.destroy()
 
 shopApp = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Mango", "Strawberry"])
-shop2 = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Strawberry"])
+# shop2 = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Strawberry"])
 
 
-shop2.myFrame.mainloop()
+shopApp.myFrame.mainloop()
