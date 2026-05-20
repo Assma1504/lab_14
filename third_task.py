@@ -79,7 +79,6 @@ class iceCreamStandInterface:
     def add_flavor(self):
 
         self.addedFlavor = self.addFlavorEntry.get()
-        print(self.check_input(self.addedFlavor))
         isValidInput = self.check_input(self.addedFlavor)
 
         if isValidInput :
