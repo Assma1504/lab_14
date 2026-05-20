@@ -2,6 +2,7 @@
 from tkinter import*
 from tkinter import ttk
 from tkinter import messagebox
+import re
 
 class iceCreamStandInterface:
    
@@ -43,14 +44,15 @@ class iceCreamStandInterface:
         self.operationDeleteFlavor.grid(row=4, column=0, sticky="w", pady=5, padx=5)
         
     def defined_operation(self):
+
         operationChoice = self.operation.get() 
-         
         if operationChoice == "add":
             self.show_add_flavor_elements()
         else:
             self.delete_flavor()
 
     def destroy_all_elements(self):
+
         self.addFlavorLabel.destroy()
         self.addFlavorEntry.destroy()
         self.btnAddFlavor.destroy()
@@ -64,7 +66,7 @@ class iceCreamStandInterface:
             self.flavorOptions.set('')
 
     def show_add_flavor_elements(self):
-        print(self.flavors)
+
         self.destroy_all_elements()
         self.myFrame.geometry("500x350")
         self.addFlavorLabel = Label(self.myFrame, text="Add flavor",font="Calibri 14 bold" )
@@ -75,11 +77,12 @@ class iceCreamStandInterface:
         self.btnAddFlavor.grid(row=6, column=0,  padx=(10, 20), pady=30, sticky="e", ipadx=5, ipady=5)
 
     def add_flavor(self):
-        print(self.flavors)
+
         self.addedFlavor = self.addFlavorEntry.get()
-        if self.addedFlavor == "" :
-            messagebox.showwarning("Empty feild", "Please enter a valid value")
-        else:
+        print(self.check_input(self.addedFlavor))
+        isValidInput = self.check_input(self.addedFlavor)
+
+        if isValidInput :
             if self.addedFlavor.strip().capitalize() in [flavor.capitalize() for flavor in self.flavors] :
                 messagebox.showwarning("flavor already exists", "The flavor you're trying to add is already disponible in our restaurant please choose another")
             else:
@@ -87,11 +90,12 @@ class iceCreamStandInterface:
                 messagebox.showinfo("Flavor added", f"The {self.addedFlavor} flavor was added")
                 self.update_combobox()
                 self.addFlavorEntry.delete(0, END)
-                # self.myFrame.destroy()
-        
 
+        else:
+            messagebox.showwarning("Invalid input", "Please enter a valid value")
+        
     def delete_flavor(self):
-        print(self.flavors)
+
         self.destroy_all_elements()
         self.myFrame.geometry("500x250")
         self.flavorDeleted =  self.flavorOptions.get()
@@ -100,12 +104,16 @@ class iceCreamStandInterface:
             self.flavors.remove(self.flavorDeleted)
             messagebox.showinfo("Flavor deleted", f"The {self.flavorDeleted} flavor was deleted")
             self.update_combobox()
-            # self.myFrame.destroy()
-        else:
-            self.myFrame.destroy()
 
+    @staticmethod
+    def check_input(usersInput):
+
+        peternInput = r"^[A-z ]+$"
+        return re.match(peternInput, usersInput)
+        
+
+    
 shopApp = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Mango", "Strawberry"])
 # shop2 = iceCreamStandInterface("First restaurant", ["Banana","Cherry", "Strawberry"])
-
 
 shopApp.myFrame.mainloop()
